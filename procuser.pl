@@ -1,10 +1,21 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 use strict;
+use warnings;
+use LWP::Simple;
+
+print STDERR "Downloading latest users.csv file\n";
+
+my $radioid = get("https://www.radioid.net/static/user.csv");
+die "Download from radioid.net failed" unless defined $radioid;
+
+my @dmrusers = split(/\n/, $radioid);
+
+print STDERR "Generating RT3S compatible csv file\n";
 
 print "Radio ID,CallSign,Name,Nickname,City,State/Prov,Country\n";
 
-while (<>) {
+foreach (@dmrusers) {
     &procline($_) if (/United States/i);
     &procline($_) if (/Australia/i);
     &procline($_) if (/New Zealand/i);
@@ -27,5 +38,7 @@ sub procline {
     print $cdata[5] . ",";      # State
     print $cdata[6] . "\n";      # Country
 }
+
+print STDERR "Done\n";
 
 exit(0);
