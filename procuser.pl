@@ -2,8 +2,6 @@
 
 use strict;
 
-my $line;
-
 print "Radio ID,CallSign,Name,Nickname,City,State/Prov,Country\n";
 
 while (<>) {
